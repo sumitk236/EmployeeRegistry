@@ -1,4 +1,4 @@
-package com.registry.EmployeeRegistry;
+package com.registry.employeeregistry;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

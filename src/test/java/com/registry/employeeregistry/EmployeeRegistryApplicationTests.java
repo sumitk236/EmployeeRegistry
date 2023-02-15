@@ -1,13 +1,9 @@
-package com.registry.EmployeeRegistry;
+package com.registry.employeeregistry;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootTest
 class EmployeeRegistryApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
 
 }
