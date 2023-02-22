@@ -2,6 +2,7 @@ package com.registry.employeeregistry.controller;
 
 import com.registry.employeeregistry.dto.Employee;
 import com.registry.employeeregistry.service.EmployeeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @AUTHENTICATION Basic AUth
  * */
 @RestController
+@RequestMapping("/api")
 @Slf4j
 public class EmployeeController {
 
@@ -34,7 +36,12 @@ public class EmployeeController {
         return ResponseEntity.status(HttpStatus.OK).body(employeeList);
     }
 
-    @GetMapping("/employee/{id}")
+    /*@ApiOperation is used to provide more info on specific endpoints*/
+
+    @GetMapping("/employee/{employeeId}")
+    @ApiOperation(value = "Finds employee by ID",
+            notes = "Provide and ID to fetch the details from database",
+            response = Employee.class)
     public ResponseEntity<List<Employee>> getEmployeeById(@PathVariable int employeeId){
         MDC.put("transactionId", UUID.randomUUID().toString());
         List<Employee> employeeList=service.getEmployeeDetailsById(employeeId);
@@ -45,7 +52,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees")
-    public ResponseEntity<String> saveAllEmployees(@RequestBody Employee employee){
+    public ResponseEntity<String> saveAllEmployees(@RequestBody List<Employee> employee){
         MDC.put("transactionId", UUID.randomUUID().toString());
         String response=service.saveAllEmployeesDetails(employee);
         log.info("EventType={},transactionId={},message={}","saveAllEmployees",
@@ -57,19 +64,19 @@ public class EmployeeController {
     @PutMapping("/employees")
     public ResponseEntity<String> updateEmployees(@RequestBody Employee employee){
         MDC.put("transactionId", UUID.randomUUID().toString());
-        String response=service.updateEmployees(employee);
+        String response=service.updateEmployeesDetails(employee);
         log.info("EventType={},transactionId={},message={}","updateEmployees",
                 MDC.get("transactionId"),"update all employees data");
         MDC.clear();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/employees/{employeeId}")
     public ResponseEntity<String> deleteEmployeeById(@PathVariable int employeeId){
         MDC.put("transactionId", UUID.randomUUID().toString());
         String response=service.deleteEmployeeById(employeeId);
-        log.info("EventType={},transactionId={},message={}","updateEmployees",
-                MDC.get("transactionId"),"update all employees data");
+        log.info("EventType={},transactionId={},message={}","deleteEmployeeById",
+                MDC.get("transactionId"),"Deleted employees data by ID");
         MDC.clear();
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

@@ -13,10 +13,10 @@ public interface EmployeeService {
     List<Employee> getEmployeeDetailsById(int employeeId);
 
     /*To save employee all details in database*/
-    String saveAllEmployeesDetails(Employee employee);
+    String saveAllEmployeesDetails(List<Employee> employee);
 
     /*To update specific Employee details*/
-    String updateEmployees(Employee employee);
+    String updateEmployeesDetails(Employee employee);
 
     /*To delete any specific employee details*/
     String deleteEmployeeById(int employeeId);
