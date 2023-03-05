@@ -20,7 +20,7 @@ public class EmployeeValidation {
                                     throw new EmployeeException("Employee Object cannot be null or empty");
                                  }
                                  if (Optional.ofNullable(employee).isPresent()) {
-                                            if (Optional.ofNullable(employee.getEmployeeId()).isPresent()) {
+                                            if (!Optional.ofNullable(employee.getEmployeeId()).isPresent()) {
                                                 log.error("Employee Id cannot be blank");
                                                 isValid.set(false);
                                                 throw new EmployeeException("Employee Id cannot be blank");

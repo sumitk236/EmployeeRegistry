@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,13 +43,18 @@ public class EmployeeController {
     @ApiOperation(value = "Finds employee by ID",
             notes = "Provide and ID to fetch the details from database",
             response = Employee.class)
-    public ResponseEntity<List<Employee>> getEmployeeById(@PathVariable int employeeId){
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable int employeeId){
         MDC.put("transactionId", UUID.randomUUID().toString());
-        List<Employee> employeeList=service.getEmployeeDetailsById(employeeId);
+        Employee employeeList=service.getEmployeeDetailsById(employeeId);
         log.info("EventType={},transactionId={},message={},EmployeeId={}","getEmployeeById",
                 MDC.get("transactionId"),"Fetched employee data by Id",employeeId);
         MDC.clear();
         return ResponseEntity.status(HttpStatus.OK).body(employeeList);
+    }
+
+    @GetMapping("/employees/{employeeId}")
+    public ResponseEntity<List<Employee>> getEmployeesByMultipleID(@PathVariable int[] employeeId){
+        return ResponseEntity.status(HttpStatus.OK).body(Arrays.asList(new Employee()));
     }
 
     @PostMapping("/employees")
@@ -62,9 +68,9 @@ public class EmployeeController {
     }
 
     @PutMapping("/employees")
-    public ResponseEntity<String> updateEmployees(@RequestBody Employee employee){
+    public ResponseEntity<Employee> updateEmployees(@RequestBody Employee employee){
         MDC.put("transactionId", UUID.randomUUID().toString());
-        String response=service.updateEmployeesDetails(employee);
+        Employee response=service.updateEmployeesDetails(employee,employee.getEmployeeId());
         log.info("EventType={},transactionId={},message={}","updateEmployees",
                 MDC.get("transactionId"),"update all employees data");
         MDC.clear();

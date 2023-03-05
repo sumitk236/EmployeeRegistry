@@ -3,6 +3,10 @@ package com.registry.employeeregistry.Configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
+import org.springframework.web.client.RestTemplate;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -62,5 +66,27 @@ public class EmployeeCommonConfig {
                 "API License",
                 "http://localhost:8081",
                 Collections.emptyList());
+    }
+
+    /*RetryTemplate Configuration bean*/
+
+    @Bean
+    public RetryTemplate retryTemplate(){
+        SimpleRetryPolicy policy=new SimpleRetryPolicy();
+        policy.setMaxAttempts(3);
+
+        FixedBackOffPolicy backOffPolicy=new FixedBackOffPolicy();
+        backOffPolicy.setBackOffPeriod(3000);
+
+        RetryTemplate retryTemplate=new RetryTemplate();
+        retryTemplate.setRetryPolicy(policy);
+        retryTemplate.setBackOffPolicy(backOffPolicy);
+        return retryTemplate;
+
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
     }
 }
